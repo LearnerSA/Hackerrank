@@ -1,0 +1,128 @@
+#!/bin/python3
+# author sagnik acharyya
+
+# Complete the queensAttack function below.
+def queensAttack(n, k, r_q, c_q, obstacles):
+    spaces = 0
+    diag1 = (None,None)
+    diag2 = (None,None)
+    diag3 = (None,None)
+    diag4 = (None,None)
+    up = None
+    down = None
+    right = None
+    left = None
+    if len(obstacles)>0:
+        for x in obstacles:
+            # Diagonal cases
+            if abs(x[0] - r_q)==abs(x[1] - c_q):
+                if x[0]>r_q and x[1]>c_q:
+                    if diag1[0] is None and diag1[1] is None:
+                        diag1=(x[0],x[1])
+                        spaces += abs(x[1]-c_q)-1
+                    elif x[0]<diag1[0] and x[1]<diag1[1]:
+                        spaces -= abs(x[1]-diag1[1])
+                        diag1 = (x[0], x[1])
+                if x[0]>r_q and x[1]<c_q:
+                    if diag2[0] is None and diag2[1] is None:
+                        diag2=(x[0],x[1])
+                        spaces += abs(x[1]-c_q)-1
+                    elif x[0]<diag2[0] and x[1]>diag2[1]:
+                        spaces -= abs(x[1]-diag2[1])
+                        diag2 = (x[0], x[1])
+                if x[0]<r_q and x[1]>c_q:
+                    if diag4[0] is None and diag4[1] is None:
+                        diag4=(x[0],x[1])
+                        spaces += abs(x[1]-c_q)-1
+                    elif x[0]>diag4[0] and x[1]<diag4[1]:
+                        spaces -= abs(x[1]-diag4[1])
+                        diag4 = (x[0], x[1])
+                if x[0]<r_q and x[1]<c_q:
+                    if diag3[0] is None and diag3[1] is None:
+                        diag3=(x[0],x[1])
+                        spaces += abs(x[1]-c_q)-1
+                    elif x[0]>diag3[0] and x[1]>diag3[1]:
+                        spaces -= abs(x[1]-diag3[1])
+                        diag3 = (x[0], x[1])
+            # horizontal straight line case
+            elif x[0] == r_q:
+                if x[1]>c_q:
+                    if right is None:
+                        right = x[1]
+                        spaces += abs(x[1]-c_q)-1
+                    elif x[1]<right:
+                        spaces -= abs(x[1]-right)
+                        right = x[1]
+                if x[1]<c_q:
+                    if left is None:
+                        left = x[1]
+                        spaces += abs(x[1]-c_q)-1
+                    elif x[1]>left:
+                        spaces -= abs(x[1]-left)
+                        left = x[1]
+            #vertical straight line case
+            elif x[1] == c_q:
+                if x[0]>r_q:
+                    if up is None:
+                        up = x[0]
+                        spaces += abs(x[0]-r_q)-1
+                    elif x[0]<up:
+                        spaces -= abs(x[0]-up)
+                        up = x[0]
+                if x[0]<r_q:
+                    if down is None:
+                        down = x[0]
+                        spaces += abs(x[0]-r_q)-1
+                    elif x[1]>down:
+                        spaces -= abs(x[0]-down)
+                        down = x[0]
+            print("obstacle is:",x,"spaces is:",spaces)
+    print(spaces,"upto obstacles")
+    if up is None:
+        spaces += n-r_q
+        print(spaces, "upto up cases")
+    if down is None:
+        spaces += r_q-1
+        print(spaces, "upto down cases")
+    if right is None:
+        spaces += n-c_q
+        print(spaces, "upto right cases")
+    if left is None:
+        spaces += c_q-1
+        print(spaces, "upto left cases")
+    if diag1[0] is None:
+        spaces += min(n-c_q,n-r_q)
+        print(spaces, "upto Q1 cases")
+    if diag2[0] is None:
+        spaces += min(c_q-1,n-r_q)
+        print(spaces, "upto Q2 cases")
+    if diag3[0] is None:
+        spaces += min(r_q-1,c_q-1)
+        print(spaces, "upto Q3 cases")
+    if diag4[0] is None:
+        spaces += min(n-c_q,r_q-1)
+        print(spaces, "upto Q4 cases")
+
+    return  spaces
+
+if __name__ == '__main__':
+    nk = input().split()
+
+    n = int(nk[0])
+
+    k = int(nk[1])
+
+    r_qC_q = input().split()
+
+    r_q = int(r_qC_q[0])
+
+    c_q = int(r_qC_q[1])
+
+    obstacles = []
+
+    for _ in range(k):
+        obstacles.append(list(map(int, input().rstrip().split())))
+
+    result = queensAttack(n, k, r_q, c_q, obstacles)
+
+    print(result)
